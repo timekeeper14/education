@@ -1,0 +1,188 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>职业本科师资现状及建设实践研究</title>  
+<script type="text/javascript" src="./012大数据/js/jquery.js"></script>
+<script type="text/javascript" src="./012大数据/js/echarts.min.js"></script>
+<link rel="stylesheet" href="./signup/css/earth.css">
+<style>  
+  /* 隐藏滚动条并设置全屏样式 */  
+  body, html {  
+    margin: 0;  
+    padding: 0;  
+    overflow: hidden;  
+    height: 100%;  
+  }  
+  
+  /* 视频样式 */  
+  #myVideo {  
+    position: absolute;  
+    top: 0;  
+    left: 0;  
+    width: 100%;  
+    height: 100%;  
+    object-fit: cover;  
+    z-index: 1; /* 视频层 */  
+
+  }  
+  
+  /* 遮罩层样式 */  
+  .overlay {  
+    position: absolute;  
+    top: 0;  
+    left: 0;  
+    width: 100%;  
+    height: 100%;  
+    display: none; /* 初始隐藏遮罩层 */  
+    /* justify-content: center; 水平居中   */
+    align-items: center; /* 垂直居中 */  
+    z-index: 5; /* 遮罩层位于视频之上，但低于控制按钮 */  
+    pointer-events: auto; /* 允许遮罩层接收点击事件 */  
+  }  
+  
+  /* 遮罩层内容容器样式 */  
+  .overlay-content {  
+    position: relative;  
+    z-index: 1;  
+    color: white;  
+    text-align: center;  
+    width: 30%; /* 可视化图表和控制按钮的容器宽度 */  
+    max-width: 800px; /* 最大宽度 */  
+    padding: 20px 20px;  
+    border-radius: 10px;  
+  }  
+  
+  /* 控制按钮样式 */  
+  .floating-button {  
+    position: fixed;  
+    bottom: 35%;  
+    right: 1.3%;
+    height: 3.125rem;
+    width: 7.125rem;
+    font-size: 1.175rem;
+    font-weight: bold;
+    z-index: 4; /* 控制层，高于遮罩层 */  
+    background:url(./images/gif/动态边框.gif) no-repeat;
+    background-size: 100% 100%;  
+    color: #fce940bd;  
+    border: none;  
+    padding: 10px;  
+    cursor: pointer;  
+    border-radius: 5px;  
+    margin-right: 10px; /* 按钮之间的间距 */  
+    transition: background-color 0.3s;  
+  }  
+  
+  .floating-button:hover {  
+    background-color: rgba(0, 0, 0, 0.7);  
+  }  
+  
+/* 遮罩层控制按钮样式 */  
+.zhezhao-button {  
+    position: fixed;  
+    bottom: 24.4%;  
+    right: -2%;
+    height: 15.125rem;
+    width: 17.125rem;
+    font-size: 1.375rem;
+    font-weight: bold;
+    z-index: 11; /* 控制层，高于所有层 */  
+    background:url(./images/gif/B100科技商务边框gif动图标题栏字幕框ppt透明背景动态图片ps设计素材/49款科技边框gif动图/大图/01.gif) no-repeat;
+    background-size: 100% 100%;  
+    color: #0a055cbd;  
+    border: none;  
+    padding: 10px;  
+    cursor: pointer;  
+    border-radius: 5px;  
+    margin-right: 10px; /* 按钮之间的间距 */  
+    transition: background-color 0.3s;  
+  }  
+.tititi{
+  position: absolute;
+  bottom: 102px;
+  right: 98px;
+}
+  /* 示例图表样式（你可以使用任何图表库，如Chart.js, D3.js等） */  
+  .chart {  
+    width: 28.25rem;  
+    height: 25.75rem; /* 图表高度 */  
+    /* background-color: #f0f0f0; 占位符背景色   */
+    margin-bottom: 20px; /* 图表之间的间距 */  
+    box-shadow: 0 0 5px rgba(131,189,227,1); 
+    opacity: 0.88;
+  }  
+</style>  
+</head>  
+<body>  
+<video id="myVideo">  
+  <source src="./images/海科卫星俯瞰.mp4" type="video/mp4">  
+  Your browser does not support the video tag.  
+</video>  
+  
+<!-- 遮罩层 -->  
+<div class="overlay" id="overlay">  
+  <div class="overlay-content">  
+    <!-- 示例图表（你需要用实际的图表库替换这些占位符） --> 
+    <div class="tit">教学相关管理人员 </div>
+    <div class="chart" id="chart1"></div>  
+    <div class="tit">各单位教职工人数top20 </div>
+    <div class="chart" id="chart2"></div>  
+  </div>
+  <div class="head clearfix">
+    <h1 class="pulll_left"></h1>
+    <div class="menu menu2 pulll_left">
+    </div>
+    <a href="./009平台/index.html"><div class="zhezhao-button">
+      <div class="tititi">登入界面</div>
+    </div></a>
+    <!-- 控制按钮（隐藏，因为我们将使用自定义按钮） -->  
+  </div>  
+</div>  
+  
+<!-- 自定义控制按钮 -->  
+<button class="floating-button" id="controlButton">开始演示</button>  
+  
+<!-- 隐藏原生控件并添加自定义按钮功能 -->  
+<script>  
+   document.addEventListener('DOMContentLoaded', function() {  
+    var video = document.getElementById('myVideo');  
+    var overlay = document.getElementById('overlay');  
+    var controlButton = document.getElementById('controlButton');  
+  
+    // 初始状态：视频可能自动播放（取决于浏览器策略），遮罩层隐藏  
+    // 控制视频和遮罩层的功能  
+    controlButton.addEventListener('click', function() {  
+      if (video.paused || video.ended) {  
+        // 如果视频已暂停或已结束，则播放视频并隐藏 遮罩层  
+        video.currentTime = 0; // 重置视频到开始时间  
+        video.play();  
+        overlay.style.display = 'none'; // 隐藏遮罩层  
+      } else {  
+        // 如果视频正在播放，则暂停视频并显示遮罩层（新增逻辑）  
+        video.pause();  
+        overlay.style.display = 'flex';  
+      }  
+    });  
+  
+    // // 可选：视频播放时显示遮罩层，视频暂停或结束时隐藏遮罩层（根据需求调整）  
+    // video.addEventListener('play', function() {  
+    //   overlay.style.display = 'none'; // 显示遮罩层（如果需要在播放时显示）  
+    // });  
+  
+    // video.addEventListener('pause', function() {  
+    //   overlay.style.display = 'none'; // 隐藏遮罩层（如果需要在暂停时隐藏）  
+    // });  
+  
+    video.addEventListener('ended', function() {  
+      overlay.style.display = 'flex'; // 隐藏遮罩层（如果需要在结束时隐藏）  
+    });  
+  });  
+</script>  
+  
+<!-- 你可以在这里引入任何你需要的图表库（如Chart.js, D3.js等）的脚本 -->  
+<script src="/signup/js/earth.js"></script>  
+  
+</body>  
+</html>
