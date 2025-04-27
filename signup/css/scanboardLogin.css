@@ -2,14 +2,14 @@ html,body{
 	height: 100%;
 	overflow: hidden;
 }
-body{
+/* body{
 	background: url(../images/3.jpg) no-repeat;
 	background-size: 100% 100%;
-}
-/* body{
+} */
+body{
 	background: url(../../images/最终背景.gif) no-repeat;
 	background-size: 100% 100%;
-  } */
+  }
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
@@ -18,8 +18,8 @@ select:-webkit-autofill {
 }
 .wp{
 	height: 100%;
-	/* background: url(../images/bgImg.png) no-repeat center 0;
-	background-size: auto 100%; */
+	background: url(../images/bgImg.png) no-repeat center 0;
+	background-size: auto 100%;
 	position: relative;
 	z-index: 2;
 }
